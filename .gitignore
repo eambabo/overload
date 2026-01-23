@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Data
+data/input/*
+data/output/*
+!data/input/.gitkeep
+!data/output/.gitkeep
+
+# Models
+*.pt
+models/*.pt
+models/*.onnx
+
+# Training data (generated)
+data/raw/
+data/garbage_cans/train/
+data/garbage_cans/val/
+data/temp_yolo/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store

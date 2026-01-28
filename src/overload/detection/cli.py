@@ -17,6 +17,9 @@ def main():
     parser.add_argument(
         "-c", "--confidence", type=float, default=0.3, help="Confidence threshold (default: 0.3)"
     )
+    parser.add_argument(
+        "-t", "--track", action="store_true", help="Enable tracking to count unique objects (video only)"
+    )
     args = parser.parse_args()
 
     input_path = Path(args.input)
@@ -36,9 +39,16 @@ def main():
 
     elif suffix in VIDEO_EXTENSIONS:
         print(f"Processing video: {input_path.name}")
-        all_detections = detector.detect_video(input_path, args.output)
-        total = sum(len(frame_dets) for frame_dets in all_detections)
-        print(f"Processed {len(all_detections)} frames, found {total} total detections")
+        if args.track:
+            print("Tracking enabled - counting unique objects...")
+            result = detector.detect_video_with_tracking(input_path, args.output)
+            print(f"Processed {len(result['frames'])} frames")
+            print(f"Total detections: {result['total_detections']}")
+            print(f"Unique garbage cans: {len(result['unique_ids'])}")
+        else:
+            all_detections = detector.detect_video(input_path, args.output)
+            total = sum(len(frame_dets) for frame_dets in all_detections)
+            print(f"Processed {len(all_detections)} frames, found {total} total detections")
         if args.output:
             print(f"Annotated video saved to: {args.output}")
 
